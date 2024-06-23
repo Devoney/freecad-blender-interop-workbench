@@ -10,7 +10,9 @@ Then in FreeCAD enable this workbench by going to FreeCAD's menu -> Edit -> Pref
 
 # Usage instructions
 
-YouTube: https://www.youtube.com/watch?v=WJBEbAPwoR4
+**YouTube**: 
+- [With simple cone like shape](https://www.youtube.com/watch?v=WJBEbAPwoR4)
+- [With complex shape from an actual 3D scan](https://youtu.be/ogd9ENfVmAk)
 
 - Create a mesh, a body or a part.
 - Go to the Blender Interop Workbench
