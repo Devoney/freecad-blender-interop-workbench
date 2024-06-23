@@ -12,8 +12,10 @@ def process(new_mesh_path, export_path, thickness_amount):
     
     # Apply offset modifier to the new mesh
     mod = new_mesh.modifiers.new(name='Solidify', type='SOLIDIFY')
-    mod.thickness = thickness_amount
     mod.offset = 0
+    mod.thickness = thickness_amount
+    mod.use_rim = True
+    mod.use_rim_only = True
 
     # Apply the modifier
     bpy.context.view_layer.objects.active = new_mesh
