@@ -1,7 +1,7 @@
 # FreeCAD Blender Interop Workbench
 
 This workbench allows you to apply a modifier from Blender on a Part/Body in FreeCAD parametrically. It also works on meshes.
-Note that this was created very minimalistically as the 3D offset operation in FreeCAD didn't work for me, but it worked in Blender.
+I created this as the 3D offset operation in FreeCAD didn't work for me, but it worked in Blender.
 Perhaps I will add support for more modifiers, but currently that is the only modifier supported: Solidify.
 
 # Installation instructions
