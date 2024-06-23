@@ -22,7 +22,9 @@ class BlenderMeshProcessor:
         if not hasattr(obj, "Thickness"):
             obj.addProperty("App::PropertyString", "Thickness", "Blender", "Thickness to apply to the part")
             obj.Thickness = str(self.thickness)  # Set initial thickness value
-        obj.addProperty("App::PropertyBool", "AutoRecompute", "Blender", "Automatically recompute on changes").AutoRecompute = False
+        if not hasattr(obj, "RemeshBefore"):
+            obj.addProperty("App::PropertyBool", "RemeshBefore", "Blender", "Whether to apply the remesh modifier beforehand to prevent a result with self intersection.")
+            obj.RemeshBefore = False
     
     def execute(self, obj):
         # Do not trigger recomputes when in sketch mode or so.
@@ -33,6 +35,7 @@ class BlenderMeshProcessor:
         # Ensure the properties are updated
         part = obj.Part
         thickness = obj.Thickness
+        remesh_before = obj.RemeshBefore
         FreeCAD.Console.PrintMessage(f"Thickness: {thickness}.\n")
 
         if not part:
@@ -48,7 +51,7 @@ class BlenderMeshProcessor:
             self.export_part_to_stl(part, input_stl_path)
             
             # Call Blender to process the STL file
-            self.call_blender(input_stl_path, output_stl_path, thickness)
+            self.call_blender(input_stl_path, output_stl_path, thickness, remesh_before)
             
             # Import the resulting STL back into FreeCAD
             imported_mesh = self.import_stl_to_freecad(output_stl_path)
@@ -78,11 +81,11 @@ class BlenderMeshProcessor:
         Mesh.export(__objs__, export_path)
         FreeCAD.Console.PrintMessage(f"Exported part to STL: {export_path}\n")
 
-    def call_blender(self, input_stl, output_stl, offset):
+    def call_blender(self, input_stl, output_stl, offset, remesh_before):
         blender_executable = "blender"  # Use "blender" assuming it's in your PATH        
         script_path = os.path.join(os.path.dirname(__file__), 'BlenderScripts', self.script_file)
         try:
-            cmd = [blender_executable, "--background", "--python", script_path, "--", input_stl, output_stl, str(offset)]
+            cmd = [blender_executable, "--background", "--python", script_path, "--", input_stl, output_stl, str(offset), str(remesh_before)]
             cmdStr = " ".join(cmd)
             FreeCAD.Console.PrintMessage(f"Running command: {cmdStr}\n")
             result = subprocess.run(cmd, check=True, capture_output=True, text=True)
